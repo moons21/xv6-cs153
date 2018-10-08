@@ -66,7 +66,7 @@ exitiputtest(void)
     }
     exit(1);
   }
-  wait(1);
+  wait();
   printf(stdout, "exitiput test ok\n");
 }
 
