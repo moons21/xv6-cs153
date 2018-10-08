@@ -231,6 +231,7 @@ exit(int status)
   struct proc *p;
   int fd;
 
+  curproc->exitStatus = status; // updates exit status of the process
   if(curproc == initproc)
     panic("init exiting");
 
