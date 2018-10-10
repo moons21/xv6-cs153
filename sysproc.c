@@ -21,9 +21,9 @@ sys_exit(void)
 }
 
 int
-sys_wait(void)
+sys_wait(int *status)
 {
-  return wait();
+  return wait(status);
 }
 
 int
