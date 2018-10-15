@@ -288,7 +288,6 @@ wait(int *status) // takes pointer to the status variable and updates it
       havekids = 1;
       if(p->state == ZOMBIE){
         // Found one.
-        *status = p->exitStatus; //assign exit status
         pid = p->pid;
         kfree(p->kstack);
         p->kstack = 0;
@@ -301,8 +300,7 @@ wait(int *status) // takes pointer to the status variable and updates it
         release(&ptable.lock);
 	// after we're done closing everything, lets update status variable
 	if (status != 0){ // but only if it points to something
-            //*status = p->exitStatus; //assign exit status
-            *status = 420420;
+            status = p->exitStatus; //assign exit status
         }
         return pid;
       }
