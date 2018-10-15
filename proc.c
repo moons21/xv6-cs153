@@ -277,7 +277,6 @@ wait(int *status)
   int havekids, pid;
   struct proc *curproc = myproc();
   
-  *status = curproc->exitStatus; //assign exit status
   acquire(&ptable.lock);
   for(;;){
     // Scan through table looking for exited children.
@@ -288,6 +287,7 @@ wait(int *status)
       havekids = 1;
       if(p->state == ZOMBIE){
         // Found one.
+        *status = p->exitStatus; //assign exit status
         pid = p->pid;
         kfree(p->kstack);
         p->kstack = 0;
