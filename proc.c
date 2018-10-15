@@ -288,6 +288,7 @@ wait(int *status) // takes pointer to the status variable and updates it
       havekids = 1;
       if(p->state == ZOMBIE){
         // Found one.
+        *status = p->exitStatus; //assign exit status
         pid = p->pid;
         kfree(p->kstack);
         p->kstack = 0;
