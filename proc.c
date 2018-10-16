@@ -300,7 +300,7 @@ wait(int *status) // takes pointer to the status variable and updates it
         release(&ptable.lock);
 	// after we're done closing everything, lets update status variable
 	if (status != 0){ // but only if it points to something
-            status = p->exitStatus; //assign exit status
+            *status = p->exitStatus; //assign exit status
         }
         return pid;
       }

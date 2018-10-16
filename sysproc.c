@@ -14,16 +14,23 @@ sys_fork(void)
 }
 
 int
-sys_exit(int status)
+sys_exit(void)
 {
-  exit(status);
+  int status;
+  // Basically copying the format of how sys_kill uses argint
+  if(argint(0,&status) < 0){ return -1;}
+  exit(status);	
   return 0;  // not reached
 }
 
 int
-sys_wait(int *status)
+sys_wait(void)
 {
-  return wait(status);
+
+  int status;
+  // argint is used to get variable from userspace and transfer to kernel
+  if(argint(0, &status) < 0){ return -1;}
+  return wait((int*)status);
 }
 
 int
