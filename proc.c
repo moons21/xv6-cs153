@@ -332,10 +332,10 @@ waitpid(int pid, int *status, int options)
     // Scan through table looking for exited children.
     exists = 0;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->parent != curproc)
+      if(p->pid != pid)	// check if we found the pid
         continue;
-      exists = 1;
-      if(p->state == ZOMBIE){
+      exists = 1;       // Other wise we found it
+      if(p->state == ZOMBIE){ // Make sure its ready to be closed though
         // Found one.
         rpid = p->pid;
         kfree(p->kstack);
@@ -347,7 +347,10 @@ waitpid(int pid, int *status, int options)
         p->killed = 0;
         p->state = UNUSED;
         release(&ptable.lock);
-  	*status = curproc->exitStatus; //assign exit status
+        // after we're done closing everything, lets update status variable
+	if (status != 0){ // but only if it points to something
+            *status = p->exitStatus; //assign exit status
+        }
         return rpid;
       }
     }
