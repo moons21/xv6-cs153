@@ -224,7 +224,7 @@ fork(void)
 // Set priority of current process (0 is highest, 63 is lowest)
 //
 void
-setPriority(int priority){
+setpriority(int priority){
   struct proc *curproc = myproc();	// get current process	
   curproc->priority = priority;
 }
