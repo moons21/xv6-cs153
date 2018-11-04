@@ -221,6 +221,13 @@ fork(void)
   return pid;
 }
 
+// Set priority of current process (0 is highest, 63 is lowest)
+//
+void
+setPriority(int priority){
+  struct proc *curproc = myproc();	// get current process	
+  curproc->priority = priority;
+}
 // Exit the current process.  Does not return.
 // An exited process remains in the zombie state
 // until its parent calls wait() to find out it exited.
