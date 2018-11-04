@@ -7,6 +7,7 @@ int main(int argc, char *argv[])
 	int exitWait(void);
 	int waitPid(void);
 	int PScheduler(void);
+        int starvation(void);
 
   printf(1, "\n This program tests the correctness of your lab#1\n");
   
@@ -16,6 +17,8 @@ int main(int argc, char *argv[])
 	waitPid();
   else if (atoi(argv[1]) == 3)
 	PScheduler();
+  else if (atoi(argv[1]) == 4)
+	starvation();
   else if (atoi(argv[1]) == 33){
 	printf(1, "Testing why setpriority is breaking: \n");
 	setpriority(555); // used to test why itsbreaking :/
@@ -149,3 +152,60 @@ int PScheduler(void){
     return 0;
 }
 
+int starvation(void){
+  int pid, ret_pid, exit_status;
+  int pCount = 3;	// how many processes we want
+  int i,j,k;
+  int arithmetic;
+
+  printf(1, "\n This will test for starvation in the priority scheduler\n");
+  printf(1, "One child will have highest priority, but take a long time to complete\n");
+  printf(1, "The other children will have low priority, but be rather fast arithmetic functions\n");
+  printf(1, "If properly handled, these other children should finish before the first child\n");
+
+  printf(1, "The parent processes will switch to priority 0\n");
+  setpriority(0);
+  for (i = 0; i <  pCount; i++) {	// Create the processes
+    pid = fork();
+    if (pid > 0 ) {	// Parent process
+      continue;
+    }
+    else if ( pid == 0) {
+	  //printf(1, "\n Hello! this is child# %d and I will change my priority to %d \n",getpid(),i);
+      setpriority(100); // set priority super high
+      if (i == 0){
+        setpriority(1);	// should be 2nd fastest process
+        printf(1, "\n child# %d doing slow operation! \n",getpid());	
+	// Do slow stuff if child 0
+        for (j=0;j<70000;j++) {
+          for(k=0;k<10000;k++) {
+            asm("nop"); }}
+
+      }
+      else{
+        printf(1, "\n child# %d this should be done quick!! \n",getpid());	
+        arithmetic = 2+2;
+        printf(1, "\n child # %d says: 2 plus 2 = %d \n", getpid(), arithmetic);
+        
+      }
+      if (i == 0){
+        printf(1, "\n child# %d with priority 1 has finished! \n",getpid());	
+      }
+      else
+        printf(1, "\n child# %d with priority 100 has finished! \n",getpid());	
+      exit(0);
+      }
+    else {
+      printf(2," \n Error \n");
+      exit(-1);
+    }
+  }
+  if(pid > 0) {
+    for (i = 0; i <  pCount; i++) {
+      ret_pid = wait(&exit_status);
+      printf(1,"\n This is the parent: child with PID# %d has finished with status %d \n",ret_pid,exit_status);
+	}
+      printf(1,"\n if processes with highest priority finished first then its correct \n");
+  }
+  return 0;
+}
