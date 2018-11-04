@@ -109,27 +109,28 @@ int PScheduler(void){
     // Assuming that the priorities range between range between 0 to 63
     // 0 is the highest priority. All processes have a default priority of 20 
     int pid, ret_pid, exit_status;
+    int pCount = 5;	// how many processes we want
     int i,j,k;
   
-    printf(1,"\nStep 2: testing priority scheduler and setpriority(int priority)) system call:\n");
-    printf(1,"\nStep 2: Assuming that the priorities range between range between 0 to 63\n");
-    printf(1,"\nStep 2: 0 is the highest priority. All processes have a default priority of 20\n");
-    printf(1, "\n  Step 2: The parent processes will switch to priority 0\n");
+    printf(1,"Step 2: testing priority scheduler and setpriority(int priority)) system call:\n");
+    printf(1,"Step 2: Assuming that the priorities range between range between 0 to 63\n");
+    printf(1,"Step 2: 0 is the highest priority. All processes have a default priority of 20\n");
+    printf(1, "Step 2: The parent processes will switch to priority 0\n");
 
     setpriority(0);
-    for (i = 0; i <  3; i++) {
+    for (i = 0; i <  pCount; i++) {
 	pid = fork();
 	if (pid > 0 ) {	// Parent process
 	    continue;
         }
 	else if ( pid == 0) {
-	  printf(1, "\n Hello! this is child# %d and I will change my priority to %d \n",getpid(),60-20*i);
+	  printf(1, "\n Hello! this is child# %d and I will change my priority to %d \n",getpid(),pCount*20-20*i);
 	  //printf(1, "\n Hello! this is child# %d and I will change my priority to %d \n",getpid(),i);
-		setpriority(60 - 20*i);	
+		setpriority(pCount*20 - 20*i);	
 		for (j=0;j<50000;j++) {
 			for(k=0;k<10000;k++) {
 				asm("nop"); }}
-		printf(1, "\n child# %d with priority %d has finished! \n",getpid(),60-20*i);	
+		printf(1, "\n child# %d with priority %d has finished! \n",getpid(),pCount*20-20*i);	
 		//printf(1, "\n child# %d with priority %d has finished! \n",getpid(),i);	
 		exit(0);
         }
@@ -139,7 +140,7 @@ int PScheduler(void){
         }
     }
     if(pid > 0) {
-        for (i = 0; i <  3; i++) {
+        for (i = 0; i <  pCount; i++) {
 	    ret_pid = wait(&exit_status);
 	    printf(1,"\n This is the parent: child with PID# %d has finished with status %d \n",ret_pid,exit_status);
 	}
