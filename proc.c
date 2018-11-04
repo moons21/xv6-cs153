@@ -86,6 +86,7 @@ allocproc(void)
   return 0;
 
 found:
+  p->priority = 20; // default priority
   p->state = EMBRYO;
   p->pid = nextpid++;
 
@@ -111,6 +112,7 @@ found:
   p->context = (struct context*)sp;
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
+
 
   return p;
 }
