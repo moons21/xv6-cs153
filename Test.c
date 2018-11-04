@@ -123,12 +123,14 @@ int PScheduler(void){
 	    continue;
         }
 	else if ( pid == 0) {
-		printf(1, "\n Hello! this is child# %d and I will change my priority to %d \n",getpid(),60-20*i);
-		// FIXME setpriority(60-20*i);	
+	  printf(1, "\n Hello! this is child# %d and I will change my priority to %d \n",getpid(),60-20*i);
+	  //printf(1, "\n Hello! this is child# %d and I will change my priority to %d \n",getpid(),i);
+		setpriority(60 - 20*i);	
 		for (j=0;j<50000;j++) {
 			for(k=0;k<10000;k++) {
 				asm("nop"); }}
-		printf(1, "\n child# %d with priority %d has finished! \n",getpid(),60-20*i);		
+		printf(1, "\n child# %d with priority %d has finished! \n",getpid(),60-20*i);	
+		//printf(1, "\n child# %d with priority %d has finished! \n",getpid(),i);	
 		exit(0);
         }
         else {
