@@ -112,7 +112,7 @@ int PScheduler(void){
     // Assuming that the priorities range between range between 0 to 63
     // 0 is the highest priority. All processes have a default priority of 20 
     int pid, ret_pid, exit_status;
-    int pCount = 5;	// how many processes we want
+    int pCount = 3;	// how many processes we want
     int i,j,k;
   
     printf(1,"Step 2: testing priority scheduler and setpriority(int priority)) system call:\n");
