@@ -24,6 +24,16 @@ sys_exit(void)
 }
 
 int
+sys_setpriority(void)
+{
+  int priority;
+  if (argint(0, &priority) < 0){return -1;}
+  setpriority(priority);	
+   
+  return 0;
+}
+
+int
 sys_wait(void)
 {
 
@@ -42,16 +52,6 @@ sys_waitpid(void)
   if(argint(1, &status) < 0){ return -1;}
   if(argint(2, &options) < 0){ return -1;}
   return waitpid(pid, (int*)status, options);
-}
-
-int
-sys_setpriority(void)
-{
-  int priority;
-  if (argint(0, &priority) < 0)
-    return -1;
-    setpriority(priority);	// not reached
-    return 0;
 }
 
 int

@@ -87,6 +87,7 @@ extern int sys_close(void);
 extern int sys_dup(void);
 extern int sys_exec(void);
 extern int sys_exit(void);
+extern int sys_setpriority(void);
 extern int sys_fork(void);
 extern int sys_fstat(void);
 extern int sys_getpid(void);
@@ -104,7 +105,6 @@ extern int sys_wait(void);
 extern int sys_waitpid(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
-extern int sys_setpriority(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
