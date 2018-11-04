@@ -16,6 +16,11 @@ int main(int argc, char *argv[])
 	waitPid();
   else if (atoi(argv[1]) == 3)
 	PScheduler();
+  else if (atoi(argv[1]) == 33){
+	printf(1, "Testing why setpriority is breaking: \n");
+	setpriority(555); // used to test why itsbreaking :/
+	printf(1, "Congrats, it didnt break \n");
+  }
   else 
    printf(1, "\ntype \"lab1 1\" to test exit and wait, \"lab1 2\" to test waitpid and \"lab1 3\" to test the priority scheduler \n");
   
@@ -111,7 +116,7 @@ int PScheduler(void){
     printf(1,"\nStep 2: 0 is the highest priority. All processes have a default priority of 20\n");
     printf(1, "\n  Step 2: The parent processes will switch to priority 0\n");
 
-    //FIXME setpriority(0);
+    setpriority(0);
     for (i = 0; i <  3; i++) {
 	pid = fork();
 	if (pid > 0 ) {	// Parent process
