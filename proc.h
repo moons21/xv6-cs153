@@ -52,6 +52,7 @@ struct proc {
   int exitStatus;              // status
   
   int priority;	               // Used for priority scheduler
+  uint lastTick;
 };
 
 // Process memory is laid out contiguously, low addresses first:

@@ -8,9 +8,9 @@ int main(int argc, char *argv[])
 	int waitPid(void);
 	int PScheduler(void);
         int starvation(void);
+	int testTime(int);
 
   printf(1, "\n This program tests the correctness of your lab#1\n");
-  
   if (atoi(argv[1]) == 1)
 	exitWait();
   else if (atoi(argv[1]) == 2)
@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
 	PScheduler();
   else if (atoi(argv[1]) == 4)
 	starvation();
+  else if (atoi(argv[1]) == 5)
+        testTime(atoi(argv[2]));
   else if (atoi(argv[1]) == 33){
 	printf(1, "Testing why setpriority is breaking: \n");
 	setpriority(555); // used to test why itsbreaking :/
@@ -112,7 +114,7 @@ int PScheduler(void){
     // Assuming that the priorities range between range between 0 to 63
     // 0 is the highest priority. All processes have a default priority of 20 
     int pid, ret_pid, exit_status;
-    int pCount = 3;	// how many processes we want
+    int pCount = 10;	// how many processes we want
     int i,j,k;
   
     printf(1,"Step 2: testing priority scheduler and setpriority(int priority)) system call:\n");
@@ -155,7 +157,8 @@ int PScheduler(void){
 int starvation(void){
   int pid, ret_pid, exit_status;
   int pCount = 3;	// how many processes we want
-  int i,j,k;
+  //int i,j,k;
+  int i;
   int arithmetic;
 
   printf(1, "\n This will test for starvation in the priority scheduler\n");
@@ -172,14 +175,16 @@ int starvation(void){
     }
     else if ( pid == 0) {
 	  //printf(1, "\n Hello! this is child# %d and I will change my priority to %d \n",getpid(),i);
-      setpriority(100); // set priority super high
+      setpriority(2); // set priority super high
       if (i == 0){
         setpriority(1);	// should be 2nd fastest process
         printf(1, "\n child# %d doing slow operation! \n",getpid());	
 	// Do slow stuff if child 0
-        for (j=0;j<70000;j++) {
+        /*for (j=0;j<70000;j++) {
           for(k=0;k<10000;k++) {
             asm("nop"); }}
+	*/
+	sleep(101); // slep for 101 ticks
 
       }
       else{
@@ -207,5 +212,14 @@ int starvation(void){
 	}
       printf(1,"\n if processes with highest priority finished first then its correct \n");
   }
+  return 0;
+}
+
+int testTime(int n){
+  uint startTime = uptime(); 
+  printf(1,  "Start time %d\n", startTime);
+  while (uptime() - startTime < n){};
+  printf(1, "End time: %d\n", uptime());
+  printf(1, "Lasted %d ticks\n", n);
   return 0;
 }

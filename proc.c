@@ -410,14 +410,24 @@ scheduler(void)
           highP = iterator;  // Update the highest priority if we find a higher one
 	else{
 	  // We just skipped a runnable process...
+          if (iterator->lastTick == 0)
+            iterator->lastTick = ticks;
           if (iterator->priority > 1)
+            if (ticks - iterator->lastTick > 1000){
               iterator->priority -= 1;  // Since we're skipping it, bump it up so it doesnt starve
+	    }
         }
 
       } 
       // After the second loop, make sure you update highPriority
       p = highP;
-      p->priority += 1;	// Less priority since we're running it
+      p->lastTick = ticks;
+      if (iterator->lastTick == 0)
+        iterator->lastTick = ticks;
+      if (ticks - iterator->lastTick > 2000){
+        p->priority += 1;	// Less priority since we're running it
+	iterator->lastTick = ticks;
+      }
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
